@@ -25,7 +25,7 @@ import { AppHeaderSkeleton } from './lib/components/AppHeaderSkeleton/index';
 import { ErrorBanner } from './lib/components/ErrorBanner/index';
 
 const client = new ApolloClient({
-	uri: process.env.REACT_APP_API,
+	uri: '/api',
 	request: async (operation) => {
 		const token = sessionStorage.getItem('token');
 		operation.setContext({
