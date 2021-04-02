@@ -18,7 +18,7 @@ export const UserListings = ({
 	limit,
 	setListingsPage,
 }: Props) => {
-	const { total, result } = userListings;
+	const { total, result } = userListings!;
 
 	const userListingsList = (
 		<List

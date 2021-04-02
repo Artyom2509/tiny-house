@@ -56,7 +56,7 @@ export interface User_user {
   hasWallet: boolean;
   income: number | null;
   bookings: User_user_bookings | null;
-  listings: User_user_listings;
+  listings: User_user_listings | null;
 }
 
 export interface User {
