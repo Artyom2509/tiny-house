@@ -9,7 +9,7 @@ interface Error {
 
 export const server = {
 	fetch: async <TData = any, TVariables = any>(body: Body<TVariables>) => {
-		const res = await fetch(process.env.REACT_APP_API!, {
+		const res = await fetch('/api', {
 			method: 'POST',
 			headers: {
 				Accept: 'application/json',
