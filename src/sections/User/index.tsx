@@ -22,53 +22,40 @@ interface MatchParams {
 
 interface Props {
 	viewer: Viewer;
+	setViewer: (viewer: Viewer) => void;
 }
 
 const PAGE_LIMIT = 4;
 
 export const User = ({
-	match,
 	viewer,
+	setViewer,
+	match,
 }: Props & RouteComponentProps<MatchParams>) => {
-	const [bookingsPage, setBookingsPage] = useState(1);
 	const [listingsPage, setListingsPage] = useState(1);
-	const { data, loading, error } = useQuery<UserData, UserVariables>(USER, {
-		variables: {
-			id: match.params.id,
-			bookingsPage,
-			listingsPage,
-			limit: PAGE_LIMIT,
-		},
-		onError: console.log
-	});
-	console.log('data', match.params.id, data);
+	const [bookingsPage, setBookingsPage] = useState(1);
 
-	const user = data ? data.user : null;
-	const viewerIsUser = viewer.id === match.params.id;
+	const { data, loading, error, refetch } = useQuery<UserData, UserVariables>(
+		USER,
+		{
+			variables: {
+				id: match.params.id,
+				bookingsPage,
+				listingsPage,
+				limit: PAGE_LIMIT,
+			},
+		}
+	);
 
-	const userListings = user ? user.listings : null;
-	const userBookings = user ? user.bookings : null;
+	const handleUserRefetch = async () => {
+		await refetch();
+	};
 
-	const userProfileElement = user ? (
-		<UserProfile user={user} viewerIsUser={viewerIsUser} />
-	) : null;
-
-	const userListingsElement = userListings ? (
-		<UserListings
-			userListings={userListings}
-			listingsPage={listingsPage}
-			limit={PAGE_LIMIT}
-			setListingsPage={setListingsPage}
-		/>
-	) : null;
-
-	const userBookingsElement = userBookings ? (
-		<UserBookings
-			userBookings={userBookings}
-			bookingsPage={bookingsPage}
-			limit={PAGE_LIMIT}
-			setBookingsPage={setBookingsPage}
-		/>
+	const stripeError = new URL(window.location.href).searchParams.get(
+		'stripe_error'
+	);
+	const stripeErrorBanner = stripeError ? (
+		<ErrorBanner description="We had an issue connecting with Stripe. Please try again soon." />
 	) : null;
 
 	if (loading) {
@@ -88,8 +75,43 @@ export const User = ({
 		);
 	}
 
+	const user = data ? data.user : null;
+	const viewerIsUser = viewer.id === match.params.id;
+
+	const userListings = user ? user.listings : null;
+	const userBookings = user ? user.bookings : null;
+
+	const userProfileElement = user ? (
+		<UserProfile
+			user={user}
+			viewer={viewer}
+			viewerIsUser={viewerIsUser}
+			setViewer={setViewer}
+			handleUserRefetch={handleUserRefetch}
+		/>
+	) : null;
+
+	const userListingsElement = userListings ? (
+		<UserListings
+			userListings={userListings}
+			listingsPage={listingsPage}
+			limit={PAGE_LIMIT}
+			setListingsPage={setListingsPage}
+		/>
+	) : null;
+
+	const userBookingsElement = userListings ? (
+		<UserBookings
+			userBookings={userBookings}
+			bookingsPage={bookingsPage}
+			limit={PAGE_LIMIT}
+			setBookingsPage={setBookingsPage}
+		/>
+	) : null;
+
 	return (
 		<Content className="user">
+			{stripeErrorBanner}
 			<Row gutter={12} justify="space-between">
 				<Col xs={24}>{userProfileElement}</Col>
 				<Col xs={24}>

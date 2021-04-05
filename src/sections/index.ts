@@ -6,3 +6,4 @@ export * from './Listing';
 export * from './Host';
 export * from './User';
 export * from './Login';
+export * from './Stripe';
