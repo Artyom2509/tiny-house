@@ -26,7 +26,7 @@ import { AppHeaderSkeleton } from './lib/components/AppHeaderSkeleton/index';
 import { ErrorBanner } from './lib/components/ErrorBanner/index';
 
 const client = new ApolloClient({
-	uri: process.env.REACT_APP_API,
+	uri: '/api',
 	request: async (operation) => {
 		const token = sessionStorage.getItem('token');
 		operation.setContext({
@@ -87,7 +87,11 @@ const App = () => {
 				</Affix>
 				<Switch>
 					<Route exact path="/" component={Home} />
-					<Route exact path="/host" component={Host} />
+					<Route
+						exact
+						path="/host"
+						render={(props) => <Host {...props} viewer={viewer} />}
+					/>
 					<Route
 						exact
 						path="/stripe"
