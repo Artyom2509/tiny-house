@@ -10,19 +10,28 @@ import { Content } from 'antd/lib/layout/layout';
 import { ErrorBanner, PageSkeleton } from '../../lib/components';
 import { ListingBookings, ListingDetails } from './components';
 import { Col, Row } from 'antd';
-import { ListingCreateBooking } from './components/ListingCreateBooking/index';
+import { ListingCreateBooking, ListingCreateBookingModal } from './components';
 import { Moment } from 'moment';
+import { Viewer } from '../../lib/types';
 
 interface MatchParams {
 	id: string;
 }
 
+interface Props {
+	viewer: Viewer;
+}
+
 const PAGE_LIMIT = 3;
 
-export const Listing = ({ match }: RouteComponentProps<MatchParams>) => {
+export const Listing = ({
+	match,
+	viewer,
+}: Props & RouteComponentProps<MatchParams>) => {
 	const [bookingsPage, setBookingsPage] = useState(1);
 	const [checkInDate, setCheckInDate] = useState<Moment | null>(null);
 	const [checkOutDate, setCheckOutDate] = useState<Moment | null>(null);
+	const [modalVisible, setModalVisible] = useState(false);
 
 	const { loading, data, error } = useQuery<ListingData, ListingVariables>(
 		LISTING,
@@ -64,13 +73,28 @@ export const Listing = ({ match }: RouteComponentProps<MatchParams>) => {
 
 	const createBookingElement = listing ? (
 		<ListingCreateBooking
+			viewer={viewer}
+			host={listing.host}
+			bookingsIndex={listing.bookingsIndex}
 			price={listing.price}
 			checkInDate={checkInDate}
 			checkOutDate={checkOutDate}
 			setCheckOutDate={setCheckOutDate}
 			setCheckInDate={setCheckInDate}
+			setModalVisible={setModalVisible}
 		/>
 	) : null;
+
+	const ListingCreateBookingModalElement =
+		listing && checkInDate && checkOutDate ? (
+			<ListingCreateBookingModal
+				modalVisible={modalVisible}
+				price={listing.price}
+				checkInDate={checkInDate}
+				checkOutDate={checkOutDate}
+				setModalVisible={setModalVisible}
+			/>
+		) : null;
 
 	return (
 		<Content className="listings">
@@ -83,6 +107,7 @@ export const Listing = ({ match }: RouteComponentProps<MatchParams>) => {
 					{createBookingElement}
 				</Col>
 			</Row>
+			{ListingCreateBookingModalElement}
 		</Content>
 	);
 };

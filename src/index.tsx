@@ -100,7 +100,11 @@ const App = () => {
 						)}
 					/>
 					<Route exact path="/listings/:location?" component={Listings} />
-					<Route exact path="/listing/:id" component={Listing} />
+					<Route
+						exact
+						path="/listing/:id"
+						render={(props) => <Listing viewer={viewer} {...props} />}
+					/>
 					<Route
 						exact
 						path="/user/:id"
