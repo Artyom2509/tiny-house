@@ -44,6 +44,7 @@ export const User = ({
 				listingsPage,
 				limit: PAGE_LIMIT,
 			},
+			fetchPolicy: 'cache-and-network',
 		}
 	);
 

@@ -8,31 +8,38 @@
 //==============================================================
 
 export enum ListingType {
-  APARTMENT = "APARTMENT",
-  HOUSE = "HOUSE",
+	APARTMENT = 'APARTMENT',
+	HOUSE = 'HOUSE',
 }
 
 export enum ListingsFilter {
-  PRICE_HIGH_TO_LOW = "PRICE_HIGH_TO_LOW",
-  PRICE_LOW_TO_HIGH = "PRICE_LOW_TO_HIGH",
+	PRICE_HIGH_TO_LOW = 'PRICE_HIGH_TO_LOW',
+	PRICE_LOW_TO_HIGH = 'PRICE_LOW_TO_HIGH',
 }
 
 export interface ConnectStripeInput {
-  code: string;
+	code: string;
+}
+
+export interface CreateBookingInput {
+	id: string;
+	source: string;
+	checkIn: string;
+	checkOut: string;
 }
 
 export interface HostListingInput {
-  title: string;
-  description: string;
-  image: string;
-  type: ListingType;
-  address: string;
-  price: number;
-  numOfGuests: number;
+	title: string;
+	description: string;
+	image: string;
+	type: ListingType;
+	address: string;
+	price: number;
+	numOfGuests: number;
 }
 
 export interface LogInInput {
-  code: string;
+	code: string;
 }
 
 //==============================================================

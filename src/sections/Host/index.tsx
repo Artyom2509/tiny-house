@@ -28,6 +28,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { HOST_LISTING } from './../../lib/graphql/mutations/HostListing/index';
 import { HostListing } from '../../lib/graphql/mutations/HostListing/__generated__/HostListing';
 import { HostListingVariables } from './../../lib/graphql/mutations/HostListing/__generated__/HostListing';
+import { useScrollToTop } from '../../lib/hooks';
 
 const { Content } = Layout;
 const { Item } = Form;
@@ -53,6 +54,8 @@ export const Host: React.FC<Props> = ({ viewer }) => {
 			);
 		},
 	});
+
+	useScrollToTop();
 
 	const onFinishFailed = ({ errorFields }: any) => {
 		form.scrollToField(errorFields[0].name, {

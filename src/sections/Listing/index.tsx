@@ -10,9 +10,13 @@ import { Content } from 'antd/lib/layout/layout';
 import { ErrorBanner, PageSkeleton } from '../../lib/components';
 import { ListingBookings, ListingDetails } from './components';
 import { Col, Row } from 'antd';
-import { ListingCreateBooking, ListingCreateBookingModal } from './components';
+import {
+	ListingCreateBooking,
+	WrappedListingCreateBookingModal as ListingCreateBookingModal,
+} from './components';
 import { Moment } from 'moment';
 import { Viewer } from '../../lib/types';
+import { useScrollToTop } from '../../lib/hooks';
 
 interface MatchParams {
 	id: string;
@@ -33,10 +37,24 @@ export const Listing = ({
 	const [checkOutDate, setCheckOutDate] = useState<Moment | null>(null);
 	const [modalVisible, setModalVisible] = useState(false);
 
-	const { loading, data, error } = useQuery<ListingData, ListingVariables>(
-		LISTING,
-		{ variables: { id: match.params.id, bookingsPage, limit: PAGE_LIMIT } }
-	);
+	useScrollToTop();
+
+	const { loading, data, error, refetch } = useQuery<
+		ListingData,
+		ListingVariables
+	>(LISTING, {
+		variables: { id: match.params.id, bookingsPage, limit: PAGE_LIMIT },
+	});
+
+	const clearBookingData = () => {
+		setModalVisible(false);
+		setCheckInDate(null);
+		setCheckOutDate(null);
+	};
+
+	const handleListingRefetch = async () => {
+		await refetch();
+	};
 
 	if (loading) {
 		return (
@@ -88,11 +106,14 @@ export const Listing = ({
 	const ListingCreateBookingModalElement =
 		listing && checkInDate && checkOutDate ? (
 			<ListingCreateBookingModal
+				id={listing.id}
 				modalVisible={modalVisible}
 				price={listing.price}
 				checkInDate={checkInDate}
 				checkOutDate={checkOutDate}
 				setModalVisible={setModalVisible}
+				clearBookingData={clearBookingData}
+				handleListingRefetch={handleListingRefetch}
 			/>
 		) : null;
 

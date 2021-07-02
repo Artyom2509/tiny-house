@@ -12,6 +12,7 @@ import {
 	Listings as ListingsData,
 	ListingsVariables,
 } from '../../lib/graphql/queries/Listings/__generated__/Listings';
+import { useScrollToTop } from '../../lib/hooks';
 
 const { Content } = Layout;
 const { Paragraph, Title } = Typography;
@@ -28,8 +29,11 @@ export const Home = ({ history }: RouteComponentProps) => {
 				limit: PAGE_LIMIT,
 				page: PAGE_NUMBER,
 			},
+			fetchPolicy: 'cache-and-network',
 		}
 	);
+
+	useScrollToTop();
 
 	const renderListingsSection = () => {
 		if (loading) {

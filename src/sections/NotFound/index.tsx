@@ -1,5 +1,30 @@
 import React from 'react';
+import { Layout, Typography, Empty } from 'antd';
+import { Link } from 'react-router-dom';
+
+const { Content } = Layout;
+const { Text } = Typography;
 
 export const NotFound = () => {
-	return <div>NotFound</div>;
+	return (
+		<Content className="not-found">
+			<Empty
+				description={
+					<>
+						<Text className="not-found__description-title">
+							Something went wrong :(
+						</Text>
+						<Text className="not-found__description-subtitle">
+							The page you're looking for can't be found
+						</Text>
+					</>
+				}
+			/>
+			<Link
+				to="/"
+				className="not-found__cta ant-btn ant-btn-primary ant-btn-lg">
+				Go to Home
+			</Link>
+		</Content>
+	);
 };

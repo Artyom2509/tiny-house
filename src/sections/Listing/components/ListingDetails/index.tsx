@@ -47,7 +47,7 @@ export const ListingDetails = ({ listing }: Props) => {
 			</div>
 
 			<div className="listing-details__section">
-				<Link to={`/host/${host.id}`}>
+				<Link to={`/user/${host.id}`}>
 					<Avatar src={host.avatar} size={64} />
 					<Title level={2} className="listing-details__host-name">
 						{host.name}
